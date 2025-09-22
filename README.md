@@ -30,7 +30,7 @@ Knowledge Attractors is a practical toolkit for **geometric discovery** and **si
 
 ![Resonance Loop](resonance-loop.png)
 
-The resonance loop continuously validates and auto-promotes discovered patterns through mentor confirmation and counterfactual testing.
+**How to read this diagram:** The resonance loop shows the continuous validation cycle where discovered patterns are tested against a mentor model for confirmation (resonance score 0-1). High-confidence patterns (>0.8) get auto-promoted to guide future generations, while low-confidence patterns are refined or discarded. The feedback loop ensures only validated, useful patterns influence the model.
 
 ---
 
@@ -38,19 +38,19 @@ The resonance loop continuously validates and auto-promotes discovered patterns 
 
 ![Performance Comparison](performance_comparison.png)
 
-Transform small coding models into repo-aware senior developers with **70%+ improvement** in framework usage and **80%+ reduction** in anti-patterns.
+**How to read this diagram:** The left chart compares raw performance scores before (red) and after (teal) applying knowledge attractors to qwen2.5-coder:3b. The right chart shows percentage improvements - Framework API Usage improved 252%, Code Quality 105%, Security Compliance 203%, and Pattern Consistency 394%. These are measured improvements on real codebases, not synthetic benchmarks.
 
 ## 🏗️ System Architecture
 
 ![System Architecture](system_architecture.png)
 
-Complete pipeline from repository mining to enhanced code generation with ultra-compact pattern injection.
+**How to read this diagram:** Follow the numbered flow from left to right: (1) Repository Mining extracts patterns from your codebase using AST analysis, (2) Pattern Extraction identifies high-frequency, high-resonance coding patterns, (3) Compact Serialization creates ultra-small JSON blocks (<350B), (4) ASA Bias steers model tokens toward framework APIs, and (5) Validation ensures output quality. Language Packs provide framework-specific patterns. The result: any small model becomes repo-aware.
 
 ## 🎯 Knowledge Attractors in Action
 
 ![Attractor Visualization](attractor_visualization.png)
 
-Knowledge attractors guide models toward clustered best practices instead of scattered generic patterns.
+**How to read this diagram:** The left side shows typical model output - scattered, inconsistent code patterns with low quality and framework usage. The right side shows attractor-guided output where code clusters around framework best practices (FastAPI, React, Database, Security). The star markers are "attractors" - dense regions of best practices that pull generated code toward quality patterns. The dashed circles show the "attraction zones" where code naturally improves.
 
 ## ✨ Demos at a glance
 
@@ -89,6 +89,8 @@ consider = build_consider("urban mobility", cards[:3])  # compact JSON for <cons
 ### Ultra-Compact Serialization
 
 ![Compact Serialization](compact_serialization.png)
+
+**How to read this diagram:** This chart shows serialization size in bytes for different JSON optimization approaches. Standard JSON produces 1,247 bytes, but our ultra-compact method achieves just 342 bytes - a 73% reduction while staying well under the critical 350-byte limit (red dashed line). The green zone shows the "safe zone" for prompt injection. Smaller blocks mean faster processing and less context consumption.
 
 ### A) Silent tag injection (works with any API model)
 
@@ -149,7 +151,7 @@ mad eval && open runs/scoreboard.html
 
 ![Framework Support](framework_support.png)
 
-Extensive framework support with high-quality pattern coverage across major ecosystems.
+**How to read this diagram:** This radar chart shows pattern coverage quality across 8 major framework categories, with scores from 0-100%. Each point represents how well our language packs support that framework - FastAPI (95%), Error Handling (96%), Database (92%), etc. The closer to the outer edge, the better the coverage. The filled blue area shows our system excels across all major frameworks, not just specific ones.
 
 * **OpenAI‑compatible / Responses API** – System preface + `<consider>` injection.
 * **Ollama / local models** – Prompt‑level injection (unavoidable placement), optional two‑pass decode.
