@@ -1,0 +1,124 @@
+name: Code Attractors
+on:
+  pull_request:
+    paths:
+      - '**.py'
+      - '**.js'
+      - '**.ts'
+      - '**.tsx'
+  push:
+    branches: [main, master]
+
+jobs:
+  attractors:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Need full history for pattern mining
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install ruff mypy pylint  # Optional linters
+
+      - name: Mine repository patterns
+        id: mining
+        run: |
+          python repo_mining.py --emit patterns.json --max-files 100
+          echo "patterns_found=$(jq '.patterns | length' patterns.json || echo 0)" >> $GITHUB_OUTPUT
+
+      - name: Run code validation
+        id: validation
+        run: |
+          python code_validator.py --report validation_report.json
+          echo "validation_score=$(jq '.overall_score // 0' validation_report.json)" >> $GITHUB_OUTPUT
+
+      - name: Test code attractors with qwen
+        id: qwen_test
+        run: |
+          python qwen_code_test.py --repo . --mode ci --output qwen_results.json
+          echo "effectiveness_score=$(jq '.effectiveness_score // 0' qwen_results.json)" >> $GITHUB_OUTPUT
+        continue-on-error: true  # Don't fail CI if Ollama not available
+
+      - name: Generate pattern summary
+        run: |
+          echo "## 🎯 Code Attractor Results" > pattern_summary.md
+          echo "" >> pattern_summary.md
+          echo "- **Patterns discovered**: ${{ steps.mining.outputs.patterns_found }}" >> pattern_summary.md
+          echo "- **Code validation score**: ${{ steps.validation.outputs.validation_score }}" >> pattern_summary.md
+          echo "- **Attractor effectiveness**: ${{ steps.qwen_test.outputs.effectiveness_score }}" >> pattern_summary.md
+          echo "" >> pattern_summary.md
+          echo "### Top Patterns" >> pattern_summary.md
+          python -c "
+          import json
+          with open('patterns.json') as f:
+              data = json.load(f)
+          patterns = data.get('patterns', {})
+          sorted_patterns = sorted(patterns.items(), key=lambda x: x[1].get('resonance', 0), reverse=True)[:5]
+          for name, stats in sorted_patterns:
+              print(f'- **{name}**: {stats.get(\"frequency\", 0)} occurrences (resonance: {stats.get(\"resonance\", 0):.2f})')
+          " >> pattern_summary.md
+
+      - name: Comment PR with results
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const summary = fs.readFileSync('pattern_summary.md', 'utf8');
+
+            const comment = `🚀 **Code Attractor Analysis**
+
+            ${summary}
+
+            <details>
+            <summary>📊 Validation Details</summary>
+
+            The code attractor system analyzed your changes and mined patterns from the repository.
+
+            - Pattern mining helps identify common code structures
+            - Validation checks ensure code quality and framework conformity
+            - Effectiveness score shows how well the patterns guide code generation
+
+            </details>
+
+            ---
+            *Powered by [Knowledge Attractors](https://github.com/your-org/knowledge-attractors)*`;
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: code-attractor-results
+          path: |
+            patterns.json
+            validation_report.json
+            qwen_results.json
+            pattern_summary.md
+          retention-days: 30
+
+      - name: Cache patterns for future runs
+        uses: actions/cache@v3
+        with:
+          path: patterns.json
+          key: code-patterns-${{ hashFiles('**/*.py', '**/*.js', '**/*.ts') }}
+          restore-keys: |
+            code-patterns-

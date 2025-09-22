@@ -1,0 +1,29 @@
+cff-version: 1.2.0
+title: "Masked Attractor Discovery: Learning the Gaps in Embedding Space"
+message: "If you use this software, please cite it as below."
+type: software
+authors:
+  - given-names: Christian
+    family-names: Beaumont
+    email: christian@example.com
+  - name: "GPT-5 Thinking"
+    affiliation: "Anthropic Claude"
+repository-code: "https://github.com/knowledge-attractors"
+abstract: |
+  Masked Attractor Discovery learns the gaps between known points in embedding space.
+  We train a teacher embedding on full text, mask a concept set, and teach a small
+  student to reconstruct the missing vectors from context. Probes then snap into
+  high-density "gap" regions—i.e., implied concepts. On toy and domain corpora we
+  achieve 88–93% Top-1 masked recovery (100% Top-5, mean cosine ≥ 0.92), surface
+  stable attractors (84% persistence), and drive two applications: a Creativity Add-On
+  that emits grounded idea cards, and RLAD, a curiosity loop where the model chooses
+  what to learn next by geometric information gain.
+keywords:
+  - machine learning
+  - embeddings
+  - knowledge discovery
+  - creativity
+  - active learning
+license: MIT
+version: 1.0.0
+date-released: '2025-09-21'

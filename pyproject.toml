@@ -1,0 +1,154 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "attractor-kit"
+version = "1.0.0"
+description = "Zero-finetune repo-aware code generation for small models"
+readme = "README.md"
+requires-python = ">=3.8"
+license = {file = "LICENSE"}
+authors = [
+    {name = "Knowledge Attractors Team", email = "team@knowledge-attractors.dev"},
+]
+maintainers = [
+    {name = "Knowledge Attractors Team", email = "team@knowledge-attractors.dev"},
+]
+keywords = [
+    "code-generation",
+    "ai",
+    "machine-learning",
+    "software-engineering",
+    "pattern-mining",
+    "code-quality",
+    "ollama",
+    "qwen",
+    "repo-aware",
+    "zero-finetune"
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "Topic :: Software Development :: Code Generators",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+dependencies = [
+    "requests>=2.28.0",
+    "numpy>=1.21.0",
+    "dataclasses; python_version<'3.7'",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "pytest-cov>=4.0.0",
+    "black>=22.0.0",
+    "ruff>=0.1.0",
+    "mypy>=1.0.0",
+]
+ollama = [
+    "requests>=2.28.0",
+]
+validation = [
+    "ruff>=0.1.0",
+    "pylint>=2.15.0",
+    "mypy>=1.0.0",
+]
+all = [
+    "pytest>=7.0.0",
+    "pytest-cov>=4.0.0",
+    "black>=22.0.0",
+    "ruff>=0.1.0",
+    "mypy>=1.0.0",
+    "requests>=2.28.0",
+    "pylint>=2.15.0",
+]
+
+[project.scripts]
+attractor-mine = "cli_module:main"
+attractor-test = "qwen_code_test:main"
+attractor-validate = "code_validator:main"
+
+[project.urls]
+Homepage = "https://github.com/knowledge-attractors/attractor-kit"
+Documentation = "https://knowledge-attractors.dev/docs"
+Repository = "https://github.com/knowledge-attractors/attractor-kit.git"
+"Bug Tracker" = "https://github.com/knowledge-attractors/attractor-kit/issues"
+
+[tool.setuptools]
+packages = ["attractor_kit"]
+
+[tool.setuptools.package-data]
+attractor_kit = ["*.json", "*.yaml", "*.yml", "*.md"]
+
+[tool.black]
+line-length = 88
+target-version = ['py38']
+include = '\.pyi?$'
+extend-exclude = '''
+/(
+  # directories
+  \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | build
+  | dist
+)/
+'''
+
+[tool.ruff]
+line-length = 88
+target-version = "py38"
+select = [
+    "E",  # pycodestyle errors
+    "W",  # pycodestyle warnings
+    "F",  # pyflakes
+    "I",  # isort
+    "B",  # flake8-bugbear
+    "C4", # flake8-comprehensions
+    "UP", # pyupgrade
+]
+ignore = [
+    "E501",  # line too long, handled by black
+    "B008",  # do not perform function calls in argument defaults
+    "C901",  # too complex
+]
+
+[tool.ruff.per-file-ignores]
+"__init__.py" = ["F401"]
+
+[tool.mypy]
+python_version = "3.8"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+disallow_untyped_decorators = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_no_return = true
+warn_unreachable = true
+strict_equality = true
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = "-ra -q --strict-markers"
+testpaths = ["tests"]
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "integration: marks tests as integration tests",
+    "unit: marks tests as unit tests",
+]
