@@ -23,8 +23,14 @@ Knowledge Attractors is a practical toolkit for **geometric discovery** and **si
 * **Attractor** – A dense, coherent region in embedding space (an implied concept).
 * **Resonance** – Mentor confirmation signal (0–1) that a candidate is a real thing.
 * **Auto‑promotion** – Confirmed discoveries become teachable facts & steer future runs.
-* **ASA Bias** – Lightweight, sparse steering toward an attractor’s top‑k neighbors.
+* **ASA Bias** – Lightweight, sparse steering toward an attractor's top‑k neighbors.
 * **Compact Consider** – JSON block the model *uses* but never mentions.
+
+## 🔄 Resonance Loop in Action
+
+![Resonance Loop](resonance-loop.png)
+
+The resonance loop continuously validates and auto-promotes discovered patterns through mentor confirmation and counterfactual testing.
 
 ---
 
